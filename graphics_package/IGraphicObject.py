@@ -1,0 +1,9 @@
+from abc import ABC, abstractmethod
+
+class IGraphicObject(ABC):
+    @abstractmethod
+    def draw(self, g=None) -> None: ...
+    @abstractmethod
+    def erase(self, g=None) -> None: ...
+    @abstractmethod
+    def transform(self, trans) -> None: ...
