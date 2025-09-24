@@ -1,68 +1,54 @@
-
-from __future__ import annotations
-from typing import List
-
+# graphics_package/matrix.py
 class Matrix:
-    def __init__(self, rows: int, columns: int, init: float = 0.0):
+    def __init__(self, rows, cols, val=0.0):
         self.rows = rows
-        self.columns = columns
-        self.m: List[List[float]] = [[init for _ in range(columns)] for _ in range(rows)]
+        self.cols = cols
+        self.m = [[val for _ in range(cols)] for _ in range(rows)]
 
-    @staticmethod
-    def identity(n: int) -> 'Matrix':
-        M = Matrix(n, n, 0.0)
-        for i in range(n):
-            M.m[i][i] = 1.0
-        return M
+    @classmethod
+    def from_data(cls, data):
+        rows = len(data)
+        cols = len(data[0])
+        for r in data:
+            if len(r) != cols:
+                raise ValueError("All rows must have the same length.")
+        mat = cls(rows, cols, 0.0)
+        mat.m = [list(r) for r in data]
+        return mat
 
-    @staticmethod
-    def from_list(vals: List[List[float]]) -> 'Matrix':
-        rows = len(vals)
-        cols = len(vals[0]) if rows else 0
-        M = Matrix(rows, cols, 0.0)
-        for i in range(rows):
-            for j in range(cols):
-                M.m[i][j] = float(vals[i][j])
-        return M
+    def get_element(self, i, j):
+        return self.m[i][j]
 
-    def copy(self) -> 'Matrix':
-        out = Matrix(self.rows, self.columns, 0.0)
-        for i in range(self.rows):
-            for j in range(self.columns):
-                out.m[i][j] = self.m[i][j]
-        return out
+    def set_element(self, i, j, value):
+        self.m[i][j] = value
 
-    def mul(self, other: 'Matrix') -> 'Matrix':
-        if self.columns != other.rows:
-            raise ValueError("Dimension mismatch: %dx%d * %dx%d" % (self.rows, self.columns, other.rows, other.columns))
-        result = Matrix(self.rows, other.columns, 0.0)
-        for i in range(self.rows):
-            for j in range(other.columns):
+    def mult(self, b: "Matrix") -> "Matrix":
+        if self.rows != b.cols:
+            raise ValueError("Matrices are not conformable.")
+        result = Matrix(b.rows, self.cols, 0.0)
+        for i in range(b.rows):
+            for j in range(self.cols):
                 s = 0.0
-                for k in range(self.columns):
-                    s += self.m[i][k] * other.m[k][j]
+                for k in range(self.rows):
+                    s += b.get_element(i, k) * self.m[k][j]
                 result.m[i][j] = s
         return result
 
-    def __matmul__(self, other: 'Matrix') -> 'Matrix':
-        return self.mul(other)
+    def transform(self, b: "Matrix"):
+        if self.rows != b.cols:
+            raise ValueError("Matrices are not conformable.")
+        result = [[0.0 for _ in range(self.cols)] for _ in range(b.rows)]
+        for i in range(b.rows):
+            for j in range(self.cols):
+                s = 0.0
+                for k in range(self.rows):
+                    s += b.get_element(i, k) * self.m[k][j]
+                result[i][j] = s
+        self.m = result
+        self.rows = b.rows
 
-    def apply_to_vec(self, vec: List[float]) -> List[float]:
-        if len(vec) != self.columns:
-            raise ValueError("Vector length %d != columns %d" % (len(vec), self.columns))
-        out = [0.0]*self.rows
-        for i in range(self.rows):
-            s = 0.0
-            for j in range(self.columns):
-                s += self.m[i][j] * vec[j]
-            out[i] = s
-        return out
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-    def __str__(self) -> str:
-        rows = []
-        for i in range(self.rows):
-            rows.append("(" + ", ".join(str(self.m[i][j]) for j in range(self.columns)) + ")")
-        return "[\n" + "\n".join(rows) + "\n]"
+    def __str__(self):
+        rows_str = []
+        for row in self.m:
+            rows_str.append("(" + ", ".join(f"{x:.3f}" for x in row) + ")")
+        return "[" + "\n".join(rows_str) + "]"
