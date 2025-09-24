@@ -1,34 +1,28 @@
-"""Auto-translated skeleton from WINDOWS/Desktop/GraphicsPackage/Drawing2d.java.
-This file preserves classes, methods, and fields.
-Bodies marked TODO.
-"""
-from __future__ import annotations
-from typing import Any, Optional, List, Dict, Tuple, Iterable
-import math
+# graphics_package/Drawing2d.py
+from .CompoundGraphicObject2d import CompoundGraphicObject2d
+from .GraphicObject2d import GraphicObject2d
+from .Transformation2d import Transformation2d
 
-class Drawing2d:
+class Drawing2d(CompoundGraphicObject2d):
+    """
+    Top-level container for 2D graphics data.
+    Extends CompoundGraphicObject2d.
+    """
+
     def __init__(self):
-        self.parts = None
-        self.numberOfParts = None
-        """TODO: Translate constructor body from Java."""
-        pass
+        super().__init__()
 
-    def add(self, o):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def add(self, o: GraphicObject2d) -> None:
+        super().add(o)
 
-    def transform(self, trans):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def transform(self, trans: Transformation2d) -> None:
+        super().transform(trans)
 
-    def draw(self, g):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def draw(self, g=None) -> None:
+        super().draw(g)
 
-    def erase(self, g):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def erase(self, g=None) -> None:
+        super().erase(g)
 
-    def clear(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def clear(self) -> None:
+        self.parts.clear()
