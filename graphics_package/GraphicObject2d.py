@@ -15,7 +15,10 @@ class GraphicObject2d(IGraphicObject):
         pass
 
     def transform(self, trans: Transformation2d) -> None:
-        # Assumes Transformation2d supports matrix @ Point2d multiplication
+        """
+        Apply a 2D transformation to this object’s local origin.
+        Subclasses can extend to transform additional geometry.
+        """
         self.localOrigin = trans @ self.localOrigin
 
     def getLocalOrigin(self) -> Point2d:
