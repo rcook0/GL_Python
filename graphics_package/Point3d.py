@@ -1,19 +1,25 @@
 
-from .Matrix import Matrix
+class Point3d:
+    """3D point with x, y, z coordinates."""
 
-class Point3d(Matrix):
-    def __init__(self, in_x: float, in_y: float, in_z: float):
-        super().__init__(4, 1, 1.0)
-        self.m[0][0] = float(in_x)
-        self.m[1][0] = float(in_y)
-        self.m[2][0] = float(in_z)
+    def __init__(self, x: float, y: float, z: float):
+        self._x = x
+        self._y = y
+        self._z = z
 
-    def x(self) -> float: return float(self.m[0][0])
-    def y(self) -> float: return float(self.m[1][0])
-    def z(self) -> float: return float(self.m[2][0])
-    def set_x(self, v: float) -> None: self.m[0][0] = float(v)
-    def set_y(self, v: float) -> None: self.m[1][0] = float(v)
-    def set_z(self, v: float) -> None: self.m[2][0] = float(v)
+    def x(self) -> float: return self._x
+    def y(self) -> float: return self._y
+    def z(self) -> float: return self._z
+
+    def set_x(self, val: float) -> None: self._x = val
+    def set_y(self, val: float) -> None: self._y = val
+    def set_z(self, val: float) -> None: self._z = val
+
+    def as_tuple(self) -> tuple[float, float, float]:
+        return (self._x, self._y, self._z)
+
+    def transform(self, matrix: "Transformation3d") -> "Point3d":
+        return matrix.apply_point(self)
 
     def __str__(self) -> str:
-        return f"{self.m[0][0]} {self.m[1][0]} {self.m[2][0]}"
+        return f"{self._x} {self._y} {self._z}"
