@@ -1,78 +1,55 @@
-"""Auto-translated skeleton from WINDOWS/Desktop/GraphicsPackage/RadianSinLookup.java.
-This file preserves classes, methods, and fields.
-Bodies marked TODO.
-"""
-from __future__ import annotations
-from typing import Any, Optional, List, Dict, Tuple, Iterable
+# graphics_package/RadianSinLookup.py
 import math
 
 class RadianSinLookup:
-    def __init__(self):
-        self.radianAngles = None
-        self.sines = None
-        self.mapGranularity = None
-        self.increment = None
-        self.RSL_VALUE_NOT_FOUND = None
-        self.i = None
-        self.val1 = None
-        self.val2 = None
-        self.i = None
-        self.i = None
-        self.mapGranularity = None
-        self.tableIndex = None
-        self.i = None
-        self.i0 = None
-        self.i1 = None
-        self.table1 = None
-        self.myNegAng = None
-        self.myNegAng1 = None
-        self.myRadianAng = None
-        self.i = None
-        self.n = None
-        self.i = None
-        """TODO: Translate constructor body from Java."""
-        pass
+    """
+    Python port of RadianSinLookup.
+    Provides a sine lookup table and utility conversions.
+    """
 
-    def dump(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def __init__(self, steps: int = 360):
+        """
+        Initialize the sine lookup table.
 
-    def for(self, ++):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+        Parameters
+        ----------
+        steps : int
+            Number of steps per circle (default 360 = 1 degree resolution).
+        """
+        self.steps = steps
+        self.table = [math.sin(2 * math.pi * i / steps) for i in range(steps)]
 
-    def for(self, 1):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def radian_angle_of(self, degrees: float) -> float:
+        """
+        Convert degrees to radians.
+        """
+        return math.radians(degrees)
 
-    def for(self, i++):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def radians(self, degrees: float) -> float:
+        """
+        Alias for radian_angle_of.
+        """
+        return self.radian_angle_of(degrees)
 
-    def radianAngleOf(self, trigSinNumber):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def radians_to_degrees(self, radians: float) -> float:
+        """
+        Convert radians to degrees.
+        """
+        return math.degrees(radians)
 
-    def radians(self, degreeAngle):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def trig_sin(self, radians: float) -> float:
+        """
+        Approximate sine using lookup table.
 
-    def radiansToDegrees(self, radianAngle):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+        Parameters
+        ----------
+        radians : float
+            Angle in radians.
 
-    def trigSin(self, degreeAngle):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def trigSin(self, degreeAngle):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def main(self, args):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def for(self, i++):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+        Returns
+        -------
+        float
+            Approximated sine value.
+        """
+        index = int((radians % (2 * math.pi)) / (2 * math.pi) * self.steps)
+        return self.table[index]
