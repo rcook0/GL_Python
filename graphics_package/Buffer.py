@@ -1,120 +1,21 @@
-"""Auto-translated skeleton from WINDOWS/Desktop/GraphicsPackage/Buffer.java.
-This file preserves classes, methods, and fields.
-Bodies marked TODO.
-"""
-from __future__ import annotations
-from typing import Any, Optional, List, Dict, Tuple, Iterable
-import math
-
+# graphics_package/Buffer.py
 class Buffer:
-    def __init__(self, externalDrawing):
-        self.thr = None
-        self.itself = None
-        self.bufferImage = None
-        self.bufferGraphics = None
-        self.d = None
-        self.click = None
-        self.drag = None
-        self.selectionPoint = None
-        self.d = None
-        self.object = None
-        self.myDrawing = None
-        self.click = None
-        """TODO: Translate constructor body from Java."""
-        pass
+    """
+    Simple 2D buffer for integer pixel values.
+    """
 
-    def setDrawing(self, externalDrawing):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def __init__(self, width: int, height: int, init: int = 0):
+        self.width = width
+        self.height = height
+        self.data = [[init for _ in range(width)] for _ in range(height)]
 
-    def getSelectionPoint(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def clear(self, value: int = 0) -> None:
+        for y in range(self.height):
+            for x in range(self.width):
+                self.data[y][x] = value
 
-    def animateStart(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def set(self, x: int, y: int, value: int) -> None:
+        self.data[y][x] = value
 
-    def run(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def while(self, true):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def catch(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def animateStop(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def paintComponent(self, g):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def catch(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def catch(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def jbInit(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def keyPressed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def mouseDragged(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def mouseClicked(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def mousePressed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def mouseReleased(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def this_mouseClicked(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def click(self, ck):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def currentSelectionPointIsNew(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def dragging(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def this_mouseDragged(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def this_mousePressed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def if(self, false):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def this_mouseReleased(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def get(self, x: int, y: int) -> int:
+        return self.data[y][x]
