@@ -1,22 +1,20 @@
-"""Auto-translated skeleton from WINDOWS/Desktop/GraphicsPackage/DoubleObject.java.
-This file preserves classes, methods, and fields.
-Bodies marked TODO.
-"""
-from __future__ import annotations
-from typing import Any, Optional, List, Dict, Tuple, Iterable
-import math
-
+# graphics_package/DoubleObject.py
 class DoubleObject:
-    def __init__(self, newValue):
-        self.value = None
-        self.value = None
-        """TODO: Translate constructor body from Java."""
-        pass
+    """
+    Wrapper around a float, mirroring the Java DoubleObject.
+    """
 
-    def getValue(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def __init__(self, value: float = 0.0):
+        self.value = float(value)
 
-    def setValue(self, newValue):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def get(self) -> float:
+        return self.value
+
+    def set(self, v: float) -> None:
+        self.value = float(v)
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+    def __float__(self) -> float:
+        return self.value
