@@ -1,1 +1,1 @@
-# v4.4 package additions
+# v4.7 configurable update rates
