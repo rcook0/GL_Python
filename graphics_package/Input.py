@@ -1,12 +1,21 @@
-"""Auto-translated skeleton from WINDOWS/Desktop/GraphicsPackage/Input.java.
-This file preserves classes, methods, and fields.
-Bodies marked TODO.
-"""
-from __future__ import annotations
-from typing import Any, Optional, List, Dict, Tuple, Iterable
-import math
+# graphics_package/Buffer.py
+class Buffer:
+    """
+    Simple 2D buffer for integer pixel values.
+    """
 
-class Input:
-    def __init__(self):
-        """TODO: Translate constructor body from Java."""
-        pass
+    def __init__(self, width: int, height: int, init: int = 0):
+        self.width = width
+        self.height = height
+        self.data = [[init for _ in range(width)] for _ in range(height)]
+
+    def clear(self, value: int = 0) -> None:
+        for y in range(self.height):
+            for x in range(self.width):
+                self.data[y][x] = value
+
+    def set(self, x: int, y: int, value: int) -> None:
+        self.data[y][x] = value
+
+    def get(self, x: int, y: int) -> int:
+        return self.data[y][x]
