@@ -1,213 +1,62 @@
-"""Auto-translated skeleton from WINDOWS/Desktop/3dTest/EditViewParamsDlg.java.
-This file preserves classes, methods, and fields.
-Bodies marked TODO.
-"""
-from __future__ import annotations
-from typing import Any, Optional, List, Dict, Tuple, Iterable
-import math
+# graphics_package/EditViewParamsDlg.py
+import tkinter as tk
+from tkinter import simpledialog
+from .Point3d import Point3d
+from .View3dParameters import View3dParameters
 
-class EditViewParamsDlg:
-    def __init__(self, parent, title, modal):
-        self.borderLayout1 = None
-        self.mainPanel = None
-        self.northPanel = None
-        self.southPanel = None
-        self.rbPerspective = None
-        self.rbParallel = None
-        self.vrp = None
-        self.VRPX = None
-        self.VRPY = None
-        self.VRPZ = None
-        self.centerPanel = None
-        self.vpn = None
-        self.VPNX = None
-        self.VPNY = None
-        self.VPNZ = None
-        self.vup = None
-        self.VUPY = None
-        self.VUPX = None
-        self.VUPZ = None
-        self.vrpPanel = None
-        self.vupPanel = None
-        self.vpnPanel = None
-        self.vrcPanel = None
-        self.prp = None
-        self.PRPY = None
-        self.PRPX = None
-        self.PRPZ = None
-        self.prpPanel = None
-        self.window = None
-        self.umin = None
-        self.umax = None
-        self.vmin = None
-        self.vmax = None
-        self.w1 = None
-        self.w2 = None
-        self.w3 = None
-        self.w4 = None
-        self.bOK = None
-        self.bCANCEL = None
-        self.jPanel1 = None
-        self.vp = None
-        """TODO: Translate constructor body from Java."""
-        pass
+class EditViewParamsDlg(simpledialog.Dialog):
+    """
+    Lightweight dialog for editing 3D viewing parameters.
+    Mimics the Java Swing EditViewParamsDlg.
+    """
 
-    def jbSetup(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def __init__(self, parent, params: View3dParameters):
+        self.params = params
+        super().__init__(parent, title="Edit Viewing Parameters")
 
-    def catch(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def body(self, master):
+        row = 0
+        # Projection type radio buttons
+        tk.Label(master, text="Projection:").grid(row=row, column=0, sticky="w")
+        self.proj_var = tk.IntVar(value=self.params.projectionType)
+        tk.Radiobutton(master, text="Perspective", variable=self.proj_var,
+                       value=View3dParameters.PT_PERSPECTIVE).grid(row=row, column=1)
+        tk.Radiobutton(master, text="Parallel", variable=self.proj_var,
+                       value=View3dParameters.PT_PARALLEL).grid(row=row, column=2)
+        row += 1
 
-    def jbInit(self):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+        # VRP
+        tk.Label(master, text="VRP (x,y,z):").grid(row=row, column=0, sticky="w")
+        self.vrp_x = tk.Entry(master, width=6); self.vrp_x.insert(0, str(self.params.vrp.x() if self.params.vrp else 0))
+        self.vrp_y = tk.Entry(master, width=6); self.vrp_y.insert(0, str(self.params.vrp.y() if self.params.vrp else 0))
+        self.vrp_z = tk.Entry(master, width=6); self.vrp_z.insert(0, str(self.params.vrp.z() if self.params.vrp else 0))
+        self.vrp_x.grid(row=row, column=1); self.vrp_y.grid(row=row, column=2); self.vrp_z.grid(row=row, column=3)
+        row += 1
 
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+        # PRP
+        tk.Label(master, text="PRP (x,y,z):").grid(row=row, column=0, sticky="w")
+        self.prp_x = tk.Entry(master, width=6); self.prp_x.insert(0, str(self.params.prp.x() if self.params.prp else 0))
+        self.prp_y = tk.Entry(master, width=6); self.prp_y.insert(0, str(self.params.prp.y() if self.params.prp else 0))
+        self.prp_z = tk.Entry(master, width=6); self.prp_z.insert(0, str(self.params.prp.z() if self.params.prp else 0))
+        self.prp_x.grid(row=row, column=1); self.prp_y.grid(row=row, column=2); self.prp_z.grid(row=row, column=3)
+        row += 1
 
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+        # Window
+        tk.Label(master, text="Window (umin,umax,vmin,vmax):").grid(row=row, column=0, sticky="w")
+        self.umin = tk.Entry(master, width=6); self.umin.insert(0, str(self.params.VRCumin))
+        self.umax = tk.Entry(master, width=6); self.umax.insert(0, str(self.params.VRCumax))
+        self.vmin = tk.Entry(master, width=6); self.vmin.insert(0, str(self.params.VRCvmin))
+        self.vmax = tk.Entry(master, width=6); self.vmax.insert(0, str(self.params.VRCvmax))
+        self.umin.grid(row=row, column=1); self.umax.grid(row=row, column=2)
+        self.vmin.grid(row=row, column=3); self.vmax.grid(row=row, column=4)
+        return self.vrp_x  # initial focus
 
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def jTextField3_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def main(self, args[]):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VUPX_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VUPY_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VUPZ_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VRPX_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VRPY_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VPNX_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VPNY_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def VPNZ_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def umin_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def umax_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def vmin_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def vmax_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def PRPX_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def PRPY_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
-
-    def PRPZ_actionPerformed(self, e):
-        """TODO: Translate method body from Java."""
-        raise NotImplementedError
+    def apply(self):
+        # Update params from entries
+        self.params.projectionType = self.proj_var.get()
+        self.params.vrp = Point3d(float(self.vrp_x.get()), float(self.vrp_y.get()), float(self.vrp_z.get()))
+        self.params.prp = Point3d(float(self.prp_x.get()), float(self.prp_y.get()), float(self.prp_z.get()))
+        self.params.VRCumin = float(self.umin.get())
+        self.params.VRCumax = float(self.umax.get())
+        self.params.VRCvmin = float(self.vmin.get())
+        self.params.VRCvmax = float(self.vmax.get())
