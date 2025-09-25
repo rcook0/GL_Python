@@ -204,6 +204,10 @@ def main():
     frame = Clock()
     frame.setMainMenu(MainMenu())
     frame.initComponents()
+        """
+        for _ in range(5):
+            frame.updatePicture()
+        """
     while True:
         frame.updatePicture()
         if frame.myBuffer.dragging():
