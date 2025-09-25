@@ -15,40 +15,59 @@ class ZBufferRenderer:
         self.color_buffer.fill(0.0)
         self.z_buffer.fill(np.inf)
 
-    def render_scene(self, scene: Scene3d, color=(1.0, 1.0, 1.0)):
+    def render_scene(self, scene: Scene3d):
         """
         Rasterize polygons from a Scene3d using z-buffer hidden-surface elimination.
+        Each Polygon3d is filled with a flat color (default white).
         """
-        primitives = scene.render()  # currently returns Line2d edges
-        # To be more accurate, we should rasterize polygons directly.
-        # Here: fill edges as white pixels (wireframe mode).
-        for line in primitives:
-            self._draw_line(line, color)
+        for poly in scene.objects:
+            if isinstance(poly, Polygon3d):
+                self._rasterize_polygon(poly)
 
-    def _draw_line(self, line, color):
-        """Simple Bresenham line rasterization with depth test (wireframe)."""
-        x0, y0 = int(line.x1), int(line.y1)
-        x1, y1 = int(line.x2), int(line.y2)
-        dx = abs(x1 - x0)
-        dy = -abs(y1 - y0)
-        sx = 1 if x0 < x1 else -1
-        sy = 1 if y0 < y1 else -1
-        err = dx + dy
-        while True:
-            if 0 <= x0 < self.width and 0 <= y0 < self.height:
-                z = 0.0  # TODO: interpolate z from 3D vertices
-                if z < self.z_buffer[y0, x0]:
-                    self.z_buffer[y0, x0] = z
-                    self.color_buffer[y0, x0] = color
-            if x0 == x1 and y0 == y1:
-                break
-            e2 = 2 * err
-            if e2 >= dy:
-                err += dy
-                x0 += sx
-            if e2 <= dx:
-                err += dx
-                y0 += sy
+    def _rasterize_polygon(self, poly: Polygon3d, color=(1.0, 1.0, 1.0)):
+        """
+        Fill polygon using barycentric coordinates and z-buffer.
+        Assumes poly.vertices is a list of Point3d with projected (x, y, z).
+        """
+        verts = [(int(v.x()), int(v.y()), v.z()) for v in poly.vertices]
+        xs, ys, zs = zip(*verts)
+
+        # Bounding box
+        min_x, max_x = max(min(xs), 0), min(max(xs), self.width - 1)
+        min_y, max_y = max(min(ys), 0), min(max(ys), self.height - 1)
+
+        # Triangle only (extend later for quads/polys)
+        if len(verts) != 3:
+            return
+
+        (x0, y0, z0), (x1, y1, z1), (x2, y2, z2) = verts
+
+        # Edge function
+        def edge(xa, ya, xb, yb, xc, yc):
+            return (xc - xa) * (yb - ya) - (yc - ya) * (xb - xa)
+
+        area = edge(x0, y0, x1, y1, x2, y2)
+        if area == 0:
+            return  # Degenerate polygon
+
+        for y in range(min_y, max_y + 1):
+            for x in range(min_x, max_x + 1):
+                w0 = edge(x1, y1, x2, y2, x, y)
+                w1 = edge(x2, y2, x0, y0, x, y)
+                w2 = edge(x0, y0, x1, y1, x, y)
+
+                if (w0 >= 0 and w1 >= 0 and w2 >= 0) or (w0 <= 0 and w1 <= 0 and w2 <= 0):
+                    # Barycentric weights
+                    alpha = w0 / area
+                    beta = w1 / area
+                    gamma = w2 / area
+
+                    # Interpolated depth
+                    z = alpha * z0 + beta * z1 + gamma * z2
+
+                    if z < self.z_buffer[y, x]:
+                        self.z_buffer[y, x] = z
+                        self.color_buffer[y, x] = color
 
     def show(self):
         plt.imshow(self.color_buffer, origin="lower")
