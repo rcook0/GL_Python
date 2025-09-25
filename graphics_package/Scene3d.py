@@ -28,36 +28,36 @@ class Scene3d:
         for obj in self.objects:
             obj.transform(matrix)
 
+
     def render(self):
-        """
-        Full pipeline:
-          1. Normalize using perspective projection (view.nPer()).
-          2. Clip against canonical view volume (view.clip3d()).
-          3. Map surviving objects into viewport (view.mVV3DV()).
-          4. Project to 2D.
-        Returns: list of Line2d
-        """
-        primitives = []
+    """
+    Full pipeline:
+      1. Normalize using perspective projection (view.nPer()).
+      2. Clip lines against canonical view volume.
+      3. Map to viewport (view.mVV3DV()).
+      4. Project to 2D, with back-face culling for polygons/meshes.
+    """
+    primitives = []
+    nper = self.view.nPer()
+    viewport = self.view.mVV3DV()
+    pipeline = Transformation3d()
+    pipeline.transform(nper)
+    pipeline.transform(viewport)
 
-        # Prepare combined transform (normalize + viewport)
-        nper = self.view.nPer()
-        viewport = self.view.mVV3DV()
-        pipeline = Transformation3d()
-        pipeline.transform(nper)
-        pipeline.transform(viewport)
-
-        for obj in self.objects:
-            if isinstance(obj, Line3d):
-                # Clipping test (zmin = -1, same as Java test)
-                if self.view.clip3d(obj, zmin=-1.0):
-                    obj.transform(pipeline)
-                    primitives.extend(obj.to_2d())
-            else:
-                # For polygons/meshes: transform, then defer clipping to their edges
+    # View direction (camera looks down -Z in canonical space)
+    view_dir = Vector4d(0, 0, -1, 0)
+    
+    for obj in self.objects:
+        if isinstance(obj, Line3d):
+            if self.view.clip3d(obj, zmin=-1.0):
                 obj.transform(pipeline)
                 primitives.extend(obj.to_2d())
+        else:
+            obj.transform(pipeline)
+            # Polygons and Meshes use back-face culling
+            primitives.extend(obj.to_2d(view_dir=view_dir))
 
-        return primitives
+    return primitives
 
     def __len__(self):
         return len(self.objects)
