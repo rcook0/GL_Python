@@ -1,28 +1,26 @@
-# graphics_package/compound_graphic_object3d.py
-from graphics_package.line3d import Line3d
-from graphics_package.transformation3d import Transformation3d
+from graphics_package.igraphic_object3d import IGraphicObject3d
 
-class CompoundGraphicObject3d:
+class CompoundGraphicObject3d(IGraphicObject3d):
     def __init__(self):
-        self.objects = []  # list of Line3d (or later: Polygon3d, etc.)
+        self.objects = []
 
-    def add(self, obj):
-        if isinstance(obj, Line3d):
-            self.objects.append(obj)
-        else:
-            raise TypeError("CompoundGraphicObject3d supports Line3d (for now)")
+    def add(self, obj: IGraphicObject3d):
+        if not isinstance(obj, IGraphicObject3d):
+            raise TypeError("CompoundGraphicObject3d accepts only IGraphicObject3d")
+        self.objects.append(obj)
 
     def clear(self):
         self.objects.clear()
 
-    def transform(self, matrix: Transformation3d):
-        """Apply a transformation to all contained 3D objects."""
+    def transform(self, matrix):
         for obj in self.objects:
             obj.transform(matrix)
 
     def to_2d(self):
-        """Convert all 3D objects into their 2D equivalents (list of Line2d)."""
-        return [obj.line2d() for obj in self.objects]
+        primitives = []
+        for obj in self.objects:
+            primitives.extend(obj.to_2d())
+        return primitives
 
     def __iter__(self):
         return iter(self.objects)
