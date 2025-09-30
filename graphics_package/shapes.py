@@ -115,3 +115,22 @@ def make_torus(R=1.0, r=0.3, nu=32, nv=16):
             polys.append(Polygon3D([p00, p10, p11]))
             polys.append(Polygon3D([p00, p11, p01]))
     return polys
+
+# ----------------------
+# Shape registry
+# ----------------------
+
+def make_shapes_dict():
+    """
+    Return a dictionary mapping shape names to generator functions.
+    This is handy for CLI demos:
+        shapes = make_shapes_dict()
+        polys = shapes["sphere"]()
+    """
+    return {
+        "cube": make_cube,
+        "tetrahedron": make_tetrahedron,
+        "cone": make_cone,
+        "sphere": make_sphere,
+        "torus": make_torus,
+    }
