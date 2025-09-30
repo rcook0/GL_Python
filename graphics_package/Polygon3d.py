@@ -5,28 +5,37 @@ from graphics_package.igraphic_object3d import IGraphicObject3d
 from graphics_package.vector4d import Vector4d
 
 class Polygon3d(IGraphicObject3d):
-    def __init__(self, vertices=None):
-        self.vertices = vertices if vertices is not None else []
+    def __init__(self, *args):
+        """
+        Flexible constructor:
+        - Polygon3D() → empty polygon
+        - Polygon3D(p1, p2, p3, ...) → adds each Point3d
+        - Polygon3D([p1, p2, p3]) → adds list of Point3d
+        """
+        self.vertices = []
+        if len(args) == 1 and isinstance(args[0], (list, tuple)):
+            for v in args[0]:
+                self.add_vertex(v)
+        elif len(args) > 0:
+            for v in args:
+                self.add_vertex(v)
 
-    def add_vertex(self, p: Point3d):
-        if not isinstance(p, Point3d):
-            raise TypeError("Polygon3d only accepts Point3d vertices")
-        self.vertices.append(p)
+    def add_vertex(self, v):
+        # Expecting v to be Point3d
+        self.vertices.append(v)
 
     def transform(self, matrix):
-        for v in self.vertices:
-            v.transform(matrix)
+        self.vertices = [p.transform(matrix) for p in self.vertices]
 
     def normal(self):
-        """Compute surface normal using first 3 vertices (assumes CCW order)."""
+        # Assume triangle for now
         if len(self.vertices) < 3:
-            return Vector4d(0, 0, 0, 0)
-
-        a, b, c = self.vertices[:3]
-        ab = Vector4d.from_points(a, b)
-        ac = Vector4d.from_points(a, c)
-        n = Vector4d.product(ab, ac)  # cross product
-        return n
+            return None
+        p0, p1, p2 = self.vertices[:3]
+        u = np.array([p1.x - p0.x, p1.y - p0.y, p1.z - p0.z])
+        v = np.array([p2.x - p0.x, p2.y - p0.y, p2.z - p0.z])
+        n = np.cross(u, v)
+        return n / np.linalg.norm(n)
 
     def is_front_facing(self, view_dir: Vector4d) -> bool:
         """Return True if polygon faces the viewer."""
