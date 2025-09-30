@@ -117,20 +117,18 @@ def make_torus(R=1.0, r=0.3, nu=32, nv=16):
     return polys
 
 # ----------------------
-# Shape registry
+# Shape registry with sensible defaults
 # ----------------------
 
 def make_shapes_dict():
-    """
-    Return a dictionary mapping shape names to generator functions.
-    This is handy for CLI demos:
-        shapes = make_shapes_dict()
-        polys = shapes["sphere"]()
+"""
+    Return a dictionary mapping shape names to generator functions
+    with reasonable defaults.
     """
     return {
-        "cube": make_cube,
-        "tetrahedron": make_tetrahedron,
-        "cone": make_cone,
-        "sphere": make_sphere,
-        "torus": make_torus,
+        "cube": lambda: make_cube(size=1.0),
+        "tetrahedron": lambda: make_tetrahedron(size=1.0),
+        "cone": lambda: make_cone(radius=1.0, height=2.0, n=32),
+        "sphere": lambda: make_sphere(radius=1.0, n_lat=16, n_lon=32),
+        "torus": lambda: make_torus(R=1.0, r=0.3, nu=32, nv=16),
     }
